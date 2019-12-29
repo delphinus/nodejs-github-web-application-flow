@@ -1,0 +1,33 @@
+---
+# default settings
+env:
+    browser: true
+    es6: true
+globals:
+    Atomics: readonly
+    SharedArrayBuffer: readonly
+parserOptions:
+    ecmaVersion: 2018
+    sourceType: module
+
+# needed for TypeScript + prettier
+extends:
+    - plugin:prettier/recommended
+    - prettier/@typescript-eslint
+parser: '@typescript-eslint/parser'
+plugins:
+    - '@typescript-eslint'
+    - prettier
+    - simple-import-sort
+
+# TODO: think abount standards
+rules:
+    '@typescript-eslint/no-unused-vars': error
+    prettier/prettier:
+        - error
+        - arrowParens: always
+          bracketSpacing: true
+          printWidth: 100
+          semi: false
+          singleQuote: true
+    simple-import-sort/sort: error
