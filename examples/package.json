@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
-    "github-web-application-flow": "0.0.2"
+    "github-web-application-flow": "0.0.3"
   }
 }
