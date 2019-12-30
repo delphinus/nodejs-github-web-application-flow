@@ -23,7 +23,9 @@ export const getToken = async (config: Config, state: string, code: string) => {
     client_id: config.clientId,
     client_secret: config.clientSecret
   }).toString()
+  const agentIfNeeded = typeof config.agent === 'undefined' ? {} : { agent: config.agent }
   const res = await got.post(config.accessTokenUrl(), {
+    ...agentIfNeeded,
     body,
     headers: {
       Accept: 'application/json'
