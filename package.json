@@ -56,5 +56,13 @@
       "eslint --fix",
       "git add"
     ]
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/delphinus/nodejs-github-web-application-flow.git"
+  },
+  "bugs": {
+    "url": "https://github.com/delphinus/nodejs-github-web-application-flow/issues"
+  },
+  "homepage": "https://github.com/delphinus/nodejs-github-web-application-flow#readme"
 }
