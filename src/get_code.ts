@@ -1,5 +1,6 @@
 import express from 'express'
 import { Server } from 'http'
+import path from 'path'
 
 import { Config } from './config'
 import { isErrorResponse } from './error'
@@ -20,6 +21,7 @@ export const getCode = (config: Config, state: string) => {
   return new Promise<string>((resolve, reject) => {
     server = express()
       .set('view engine', 'pug')
+      .set('views', path.resolve(__dirname, '../views'))
       .get(/.*/, (req, res): void => {
         const params = req.query
         if (isErrorResponse(params)) {
