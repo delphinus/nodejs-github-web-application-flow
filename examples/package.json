@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
-    "github-web-application-flow": "0.0.3"
+    "github-web-application-flow": "^0.0.4"
   }
 }
