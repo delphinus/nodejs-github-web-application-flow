@@ -16,9 +16,9 @@ const main = async () => {
 ;(async () => {
   try {
     const token = await main()
-    console.log(chalk.yellow`{bold A token is obtained:} ${token}`)
+    console.log(chalk`{yellow {bold A token is obtained:} ${token}}`)
   } catch (e) {
-    console.error(chalk.red(e))
+    console.error(chalk`{red ${e}}`)
     process.exit(1)
   }
 })()
