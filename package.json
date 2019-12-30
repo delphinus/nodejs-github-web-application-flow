@@ -6,6 +6,7 @@
   "scripts": {
     "build": "rm -fr dist && npm run lint && tsc",
     "lint": "bash -c 'eslint --fix src/**/*.ts bin/**/*.ts'",
+    "prepack": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
