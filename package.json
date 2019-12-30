@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -fr dist && npm run lint && tsc",
-    "lint": "bash -c 'eslint --fix src/**/*.ts bin/**/*.ts'",
+    "lint": "bash -c 'eslint --fix src/**/*.ts examples/*.js'",
     "prepack": "npm run build",
     "test": "echo \"no test specified\""
   },
