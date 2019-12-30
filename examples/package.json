@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^3.0.0",
-    "github-web-application-flow": "0.0.1"
+    "github-web-application-flow": "0.0.2"
   }
 }
