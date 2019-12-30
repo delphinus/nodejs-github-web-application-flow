@@ -1,7 +1,6 @@
-#!/usr/bin/env npx ts-node
-import chalk from 'chalk'
-
-import { webAppFlow } from '../src/index'
+#!/usr/bin/env node
+const chalk = require('chalk')
+const { webAppFlow } = require('github-web-application-flow')
 
 const main = async () => {
   const clientId = process.env['CLIENT_ID']
