@@ -1,14 +1,18 @@
 {
   "name": "github-web-application-flow",
   "version": "0.0.1",
-  "description": "",
+  "description": "Implementation of the Web Application Flow on GitHub",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -fr dist && npm run lint && tsc",
     "lint": "bash -c 'eslint --fix src/**/*.ts bin/**/*.ts'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "github",
+    "oauth",
+    "oauth2"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
