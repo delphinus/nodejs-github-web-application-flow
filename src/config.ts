@@ -3,45 +3,44 @@
  */
 export interface WebAppFlowOptions {
   /**
-   * clientId of the App you set on GitHub.
+   * Client ID of the App you set on GitHub.
    */
   clientId: string
   /**
-   * clientSecret of the App you set on GitHub.
+   * Client Secret of the App you set on GitHub.
    */
   clientSecret: string
   /**
-   * name is the name of this application. (default: 'My App')
+   * The name of this application. (default: 'My App')
    */
   name?: string
   /**
-   * httpsAgent is an instance like http.Agent. This is the same as the option
-   * that has the same name in axios.post. By this, you can use a
-   * http/https/socks proxy to exchange an Authorization Code to an access
-   * token.
-   */
-  httpsAgent?: any
-  /**
-   * baseUrl is the base URL of GitHub API v3. You should set this for GitHub
-   * Enterprise. (ex. https://github.example.com/api/v3) (default:
-   * 'https://github.com')
+   * The base URL of GitHub API v3. You should set this for GitHub Enterprise.
+   * (ex. 'https://github.example.com') (default: 'https://github.com')
    */
   baseUrl?: string
   /**
-   * port is used for a server in local to obtain the Authorization Code from
-   * requests from GitHub. (default: 8080)
+   * A port number used for a server in local to obtain the Authorization Code
+   * for requests from GitHub. (default: 8080)
    */
   port?: number
   /**
-   * scope is a space-separated value that represents scopes you want to give
-   * to access tokens. (default: "repo user")
+   * A space-separated value that represents scopes you want to give to access
+   * tokens. (default: "repo user")
    */
   scope?: string
   /**
-   * verbose means it shows the URL to open with messages. If false, it works
-   * silently. (default: true)
+   * Show logs verbosely. For example, it shows the URL to open with messages.
+   * If false, it works silently. (default: true)
    */
   verbose?: boolean
+  /**
+   * An instance like https.Agent. This is the same as the option in
+   * AxiosRequestConfig. By this, you can use a http/https/socks proxy to
+   * exchange an Authorization Code to an access token (see examples in
+   * examples/ dir or README).
+   */
+  httpsAgent?: any
 }
 
 export class Config {
