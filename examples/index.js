@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const chalk = require('chalk')
 const { webAppFlow } = require('github-web-application-flow')
+// const SocksProxyAgent = require('socks-proxy-agent')
 
 const main = async () => {
   const clientId = process.env['CLIENT_ID']
@@ -11,6 +12,10 @@ const main = async () => {
   return webAppFlow({
     clientId,
     clientSecret
+    // You can set baseUrl to use your GitHub Enterprise's domain.
+    // baseUrl: 'https://github.your-site.com',
+    // You can use any proxy to get tokens. This example uses a SOCKS proxy.
+    // httpsAgent: new SocksProxyAgent('socks://localhost:20080')
   })
 }
 ;(async () => {
