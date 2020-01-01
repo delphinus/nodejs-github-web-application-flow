@@ -24,7 +24,7 @@ export const getToken = async (config: Config, state: string, code: string) => {
     client_secret: config.clientSecret
   }).toString()
   const agentIfNeeded = config.httpsAgent ? { httpsAgent: config.httpsAgent } : {}
-  const res = await axios.post<string>(config.accessTokenUrl().toString(), {
+  const res = await axios.post(config.accessTokenUrl().toString(), {
     ...agentIfNeeded,
     body,
     headers: {
@@ -32,12 +32,7 @@ export const getToken = async (config: Config, state: string, code: string) => {
     },
     timeout: 60000
   })
-  let obj: any
-  try {
-    obj = JSON.parse(res.data)
-  } catch (e) {
-    throw new Error(`response has invalid JSON strings: ${e}`)
-  }
+  const obj = res.data
   if (isErrorResponse(obj)) {
     throw new Error(`error from GitHub:
   error: ${obj.error}
