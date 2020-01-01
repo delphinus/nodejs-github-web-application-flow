@@ -1,4 +1,4 @@
-import got from 'got'
+import axios from 'axios'
 
 import { Config } from './config'
 import { isErrorResponse } from './error'
@@ -23,8 +23,8 @@ export const getToken = async (config: Config, state: string, code: string) => {
     client_id: config.clientId,
     client_secret: config.clientSecret
   }).toString()
-  const agentIfNeeded = typeof config.agent === 'undefined' ? {} : { agent: config.agent }
-  const res = await got.post(config.accessTokenUrl(), {
+  const agentIfNeeded = config.httpsAgent ? { httpsAgent: config.httpsAgent } : {}
+  const res = await axios.post<string>(config.accessTokenUrl().toString(), {
     ...agentIfNeeded,
     body,
     headers: {
@@ -34,7 +34,7 @@ export const getToken = async (config: Config, state: string, code: string) => {
   })
   let obj: any
   try {
-    obj = JSON.parse(res.body)
+    obj = JSON.parse(res.data)
   } catch (e) {
     throw new Error(`response has invalid JSON strings: ${e}`)
   }
