@@ -1,12 +1,3 @@
-import { AgentByProtocol } from 'got'
-import http from 'http'
-import https from 'https'
-
-/**
- * GotAgent is the type of GotOptions.agent.
- */
-type GotAgent = http.Agent | https.Agent | boolean | AgentByProtocol
-
 /**
  * WebAppFlowOptions is used to initialize the main func: webAppFlow().
  */
@@ -24,11 +15,12 @@ export interface WebAppFlowOptions {
    */
   name?: string
   /**
-   * agent is an instance like http.Agent. By this, you can use a
+   * httpsAgent is an instance like http.Agent. This is the same as the option
+   * that has the same name in axios.post. By this, you can use a
    * http/https/socks proxy to exchange an Authorization Code to an access
    * token.
    */
-  agent?: GotAgent
+  httpsAgent?: any
   /**
    * baseUrl is the base URL of GitHub API v3. You should set this for GitHub
    * Enterprise. (ex. https://github.example.com/api/v3) (default:
@@ -55,7 +47,7 @@ export interface WebAppFlowOptions {
 export class Config {
   clientId: string
   clientSecret: string
-  agent: GotAgent | undefined = undefined
+  httpsAgent: any
   name = 'My App'
   baseUrl = new URL('https://github.com')
   port = 8080
@@ -65,7 +57,7 @@ export class Config {
   constructor(options: WebAppFlowOptions) {
     this.clientId = options.clientId
     this.clientSecret = options.clientSecret
-    this.agent = options.agent
+    this.httpsAgent = options.httpsAgent
     if (options.name) {
       this.name = options.name
     }

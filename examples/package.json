@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^3.0.0",
-    "github-web-application-flow": "^0.0.4"
+    "github-web-application-flow": "^0.0.7",
+    "socks-proxy-agent": "^4.0.2"
   }
 }
