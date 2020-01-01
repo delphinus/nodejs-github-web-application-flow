@@ -22,16 +22,15 @@ export const getToken = async (config: Config, state: string, code: string) => {
     state,
     client_id: config.clientId,
     client_secret: config.clientSecret
-  }).toString()
-  const agentIfNeeded = config.httpsAgent ? { httpsAgent: config.httpsAgent } : {}
-  const res = await axios.post(config.accessTokenUrl().toString(), {
-    ...agentIfNeeded,
-    body,
+  })
+  const options = {
     headers: {
       Accept: 'application/json'
     },
+    httpsAgent: config.httpsAgent,
     timeout: 60000
-  })
+  }
+  const res = await axios.post(config.accessTokenUrl().toString(), body, options)
   const obj = res.data
   if (isErrorResponse(obj)) {
     throw new Error(`error from GitHub:
