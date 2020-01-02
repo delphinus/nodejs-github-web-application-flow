@@ -28,7 +28,7 @@ export const getCode = (config: Config, state: string) => {
           res.status(400).render('error', { ...params, ...config.toJSON() })
           reject(new Error(`error from GitHub: ${params.error_description}`))
         } else if (!isCodeParams(params)) {
-          const error = 'invalid params for GitHub'
+          const error = 'invalid params from GitHub'
           res.status(400).render('error', { error, ...config.toJSON() })
           reject(new Error(error))
         } else if (params.state !== state) {
