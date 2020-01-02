@@ -17,6 +17,7 @@ extends:
 parser: '@typescript-eslint/parser'
 plugins:
     - '@typescript-eslint'
+    - jest
     - prettier
     - simple-import-sort
 
