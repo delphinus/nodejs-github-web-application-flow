@@ -52,7 +52,7 @@ export const getToken = async (config: Config, state: string, code: string) => {
  * GitHub's spec says we should use a space-separated string (ex. 'repo user'),
  * but the received one should be a comma-separated one (ex. 'repo,user').
  */
-const isValidScope = (config: Config, scope: string) => {
+export const isValidScope = (config: Config, scope: string) => {
   const scopeSet = scope.split(',').reduce<Set<string>>((a, b) => {
     a.add(b)
     return a

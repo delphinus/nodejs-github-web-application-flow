@@ -1,0 +1,115 @@
+import express from 'express'
+
+import { Config } from './config'
+import { getToken, isValidScope } from './get_token'
+
+const config = new Config({
+  clientId: 'fooClientId',
+  clientSecret: 'fooClientSecret',
+  baseUrl: 'http://localhost:8080'
+})
+
+describe('getToken', () => {
+  describe('when GitHub returns an error response', () => {
+    it('throws an error', async () => {
+      const github = express()
+        .post(/.*/, (req, res) =>
+          res.status(200).json({
+            error: 'fooError',
+            error_description: 'fooDescription',
+            error_uri: 'http://example.com'
+          })
+        )
+        .listen(8080)
+      expect.assertions(1)
+      await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
+        /error from GitHub/
+      )
+      github.close()
+    })
+  })
+
+  describe('when GitHub returns an invalid struct', () => {
+    it('throws an error', async () => {
+      const github = express()
+        .post(/.*/, (req, res) =>
+          res.status(200).json({
+            foo: 'bar'
+          })
+        )
+        .listen(8080)
+      expect.assertions(1)
+      await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
+        /response body corrupted/
+      )
+      github.close()
+    })
+  })
+
+  describe('when GitHub returns a valid response', () => {
+    describe('when GitHub returns with lesser scopes', () => {
+      it('returns an error', async () => {
+        const github = express()
+          .post(/.*/, (req, res) =>
+            res.status(200).json({
+              access_token: 'fooAccessToken',
+              scope: 'repo',
+              token_type: 'Bearer'
+            })
+          )
+          .listen(8080)
+        expect.assertions(1)
+        await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(/invalid scope:/)
+        github.close()
+      })
+    })
+
+    describe('when GitHub returns with enough scopes', () => {
+      it('returns the Access Token', async () => {
+        const github = express()
+          .post(/.*/, (req, res) =>
+            res.status(200).json({
+              access_token: 'fooAccessToken',
+              scope: 'repo,user',
+              token_type: 'Bearer'
+            })
+          )
+          .listen(8080)
+        expect.assertions(1)
+        await expect(getToken(config, 'fooState', 'fooCode')).resolves.toBe('fooAccessToken')
+        github.close()
+      })
+    })
+  })
+})
+
+interface IsValidScopeArgs {
+  expected: string
+  actual: string
+  result: boolean
+}
+
+describe('isValidScope', () => {
+  describe.each`
+    expected       | actual              | result
+    ${'repo'}      | ${''}               | ${false}
+    ${'repo'}      | ${'user'}           | ${false}
+    ${'repo'}      | ${'repo'}           | ${true}
+    ${'repo'}      | ${'repo,user'}      | ${true}
+    ${'repo user'} | ${''}               | ${false}
+    ${'repo user'} | ${'repo user'}      | ${false}
+    ${'repo user'} | ${'repo'}           | ${false}
+    ${'repo user'} | ${'repo,user'}      | ${true}
+    ${'repo user'} | ${'repo,user,gist'} | ${true}
+  `('expected: $expected, actual: $actual', ({ expected, actual, result }: IsValidScopeArgs) => {
+    it('returns ${result}', () => {
+      const config = new Config({
+        clientId: 'fooClientId',
+        clientSecret: 'fooClientSecret',
+        scope: expected
+      })
+      expect.assertions(1)
+      expect(isValidScope(config, actual)).toBe(result)
+    })
+  })
+})
