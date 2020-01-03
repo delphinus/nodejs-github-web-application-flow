@@ -28,9 +28,14 @@ export const getToken = async (config: Config, state: string, code: string) => {
       Accept: 'application/json'
     },
     httpsAgent: config.httpsAgent,
-    timeout: 60000
+    timeout: config.tokenTimeout
   }
-  const res = await axios.post(config.accessTokenUrl().toString(), body, options)
+  const res = await axios
+    .post(config.accessTokenUrl().toString(), body, options)
+    .catch((err: Error) => {
+      err.message = `raised in getting the token: ${err.message}`
+      throw err
+    })
   const obj = res.data
   if (isErrorResponse(obj)) {
     throw new Error(`error from GitHub:

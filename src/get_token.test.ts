@@ -3,81 +3,108 @@ import express from 'express'
 import { Config } from './config'
 import { getToken, isValidScope } from './get_token'
 
-const config = new Config({
-  clientId: 'fooClientId',
-  clientSecret: 'fooClientSecret',
-  baseUrl: 'http://localhost:8080'
-})
-
 describe('getToken', () => {
-  describe('when GitHub returns an error response', () => {
+  describe('when it meets the timeout', () => {
+    const config = new Config({
+      clientId: 'fooClientId',
+      clientSecret: 'fooClientSecret',
+      baseUrl: 'http://localhost:8080',
+      tokenTimeout: 10
+    })
+
     it('throws an error', async () => {
       const github = express()
-        .post(/.*/, (req, res) =>
-          res.status(200).json({
-            error: 'fooError',
-            error_description: 'fooDescription',
-            error_uri: 'http://example.com'
-          })
-        )
+        .post(/.*/, async (_, res) => {
+          await new Promise((resolve) => setTimeout(resolve, 200))
+          res.status(200).json({})
+        })
         .listen(8080)
       expect.assertions(1)
       await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
-        /error from GitHub/
+        /timeout of \d+ms exceeded/
       )
       github.close()
     })
   })
 
-  describe('when GitHub returns an invalid struct', () => {
-    it('throws an error', async () => {
-      const github = express()
-        .post(/.*/, (req, res) =>
-          res.status(200).json({
-            foo: 'bar'
-          })
-        )
-        .listen(8080)
-      expect.assertions(1)
-      await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
-        /response body corrupted/
-      )
-      github.close()
+  describe('when it does not meet the timeout', () => {
+    const config = new Config({
+      clientId: 'fooClientId',
+      clientSecret: 'fooClientSecret',
+      baseUrl: 'http://localhost:8080'
     })
-  })
 
-  describe('when GitHub returns a valid response', () => {
-    describe('when GitHub returns with lesser scopes', () => {
-      it('returns an error', async () => {
+    describe('when GitHub returns an error response', () => {
+      it('throws an error', async () => {
         const github = express()
-          .post(/.*/, (req, res) =>
+          .post(/.*/, (_, res) =>
             res.status(200).json({
-              access_token: 'fooAccessToken',
-              scope: 'repo',
-              token_type: 'Bearer'
+              error: 'fooError',
+              error_description: 'fooDescription',
+              error_uri: 'http://example.com'
             })
           )
           .listen(8080)
         expect.assertions(1)
-        await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(/invalid scope:/)
+        await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
+          /error from GitHub/
+        )
         github.close()
       })
     })
 
-    describe('when GitHub returns with enough scopes', () => {
-      it('returns the Access Token', async () => {
+    describe('when GitHub returns an invalid struct', () => {
+      it('throws an error', async () => {
         const github = express()
-          .post(/.*/, (req, res) =>
+          .post(/.*/, (_, res) =>
             res.status(200).json({
-              access_token: 'fooAccessToken',
-              scope: 'repo,user',
-              token_type: 'Bearer'
+              foo: 'bar'
             })
           )
           .listen(8080)
         expect.assertions(1)
-        await expect(getToken(config, 'fooState', 'fooCode')).resolves.toBe('fooAccessToken')
+        await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
+          /response body corrupted/
+        )
         github.close()
+      })
+    })
+
+    describe('when GitHub returns a valid response', () => {
+      describe('when GitHub returns with lesser scopes', () => {
+        it('throws an error', async () => {
+          const github = express()
+            .post(/.*/, (_, res) =>
+              res.status(200).json({
+                access_token: 'fooAccessToken',
+                scope: 'repo',
+                token_type: 'Bearer'
+              })
+            )
+            .listen(8080)
+          expect.assertions(1)
+          await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
+            /invalid scope:/
+          )
+          github.close()
+        })
+      })
+
+      describe('when GitHub returns with enough scopes', () => {
+        it('returns the Access Token', async () => {
+          const github = express()
+            .post(/.*/, (_, res) =>
+              res.status(200).json({
+                access_token: 'fooAccessToken',
+                scope: 'repo,user',
+                token_type: 'Bearer'
+              })
+            )
+            .listen(8080)
+          expect.assertions(1)
+          await expect(getToken(config, 'fooState', 'fooCode')).resolves.toBe('fooAccessToken')
+          github.close()
+        })
       })
     })
   })
