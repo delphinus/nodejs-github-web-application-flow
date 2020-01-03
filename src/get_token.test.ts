@@ -8,7 +8,7 @@ describe('getToken', () => {
     const config = new Config({
       clientId: 'fooClientId',
       clientSecret: 'fooClientSecret',
-      baseUrl: 'http://localhost:8080',
+      baseUrl: 'http://localhost:9080',
       tokenTimeout: 10
     })
 
@@ -18,7 +18,7 @@ describe('getToken', () => {
           await new Promise((resolve) => setTimeout(resolve, 200))
           res.status(200).json({})
         })
-        .listen(8080)
+        .listen(9080)
       expect.assertions(1)
       await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
         /timeout of \d+ms exceeded/
@@ -31,7 +31,7 @@ describe('getToken', () => {
     const config = new Config({
       clientId: 'fooClientId',
       clientSecret: 'fooClientSecret',
-      baseUrl: 'http://localhost:8080'
+      baseUrl: 'http://localhost:9080'
     })
 
     describe('when GitHub returns an error response', () => {
@@ -44,7 +44,7 @@ describe('getToken', () => {
               error_uri: 'http://example.com'
             })
           )
-          .listen(8080)
+          .listen(9080)
         expect.assertions(1)
         await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
           /error from GitHub/
@@ -61,7 +61,7 @@ describe('getToken', () => {
               foo: 'bar'
             })
           )
-          .listen(8080)
+          .listen(9080)
         expect.assertions(1)
         await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
           /response body corrupted/
@@ -81,7 +81,7 @@ describe('getToken', () => {
                 token_type: 'Bearer'
               })
             )
-            .listen(8080)
+            .listen(9080)
           expect.assertions(1)
           await expect(getToken(config, 'fooState', 'fooCode')).rejects.toThrowError(
             /invalid scope:/
@@ -100,7 +100,7 @@ describe('getToken', () => {
                 token_type: 'Bearer'
               })
             )
-            .listen(8080)
+            .listen(9080)
           expect.assertions(1)
           await expect(getToken(config, 'fooState', 'fooCode')).resolves.toBe('fooAccessToken')
           github.close()
