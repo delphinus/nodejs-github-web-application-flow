@@ -37,6 +37,7 @@ describe('getCode', () => {
         )
       })
     })
+
     describe('when it does not meet the timeout', () => {
       describe('when GitHub has requested with an error', () => {
         it('returns 400: error from GitHub', async () => {
