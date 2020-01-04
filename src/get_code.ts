@@ -16,15 +16,23 @@ const isCodeParams = (params: any): params is CodeParams =>
   typeof params.state === 'string'
 
 export const getCode = (config: Config, state: string) => {
-  let s = { close() {} }
+  let timeout: NodeJS.Timeout
+  let s: { close(): void }
   return Promise.race([
-    new Promise<never>((_, reject) =>
-      setTimeout(reject, config.codeTimeout, new Error('timeout to wait for user interaction'))
-    ),
+    new Promise<never>((_, reject) => {
+      timeout = setTimeout(
+        reject,
+        config.codeTimeout,
+        new Error('timeout to wait for user interaction')
+      )
+    }),
     new Promise<string>((resolve, reject) => {
       s = server(config, state, resolve, reject)
     })
-  ]).finally(s.close.bind(s))
+  ]).finally(() => {
+    clearTimeout(timeout)
+    s.close()
+  })
 }
 
 const server = (
