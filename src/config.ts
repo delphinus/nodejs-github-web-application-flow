@@ -30,6 +30,17 @@ export interface WebAppFlowOptions {
    */
   scope?: string
   /**
+   * A timeout to wait for getting an Authorization Code from GitHub. This
+   * includes the user's interaction (sign-in, authentication, etc.), and so
+   * takes a bit long. (default: 600000 (= 10 minutes))
+   */
+  codeTimeout?: number
+  /**
+   * A timeout to wait for getting an Access Token from GitHub. (default: 60000
+   * (= 1 minutes))
+   */
+  tokenTimeout?: number
+  /**
    * Show logs verbosely. For example, it shows the URL to open with messages.
    * If false, it works silently. (default: true)
    */
@@ -52,6 +63,8 @@ export class Config {
   port = 8080
   scope = 'repo user'
   verbose = true
+  codeTimeout = 600000
+  tokenTimeout = 60000
 
   constructor(options: WebAppFlowOptions) {
     this.clientId = options.clientId
@@ -68,6 +81,12 @@ export class Config {
     }
     if (options.scope) {
       this.scope = options.scope
+    }
+    if (options.codeTimeout) {
+      this.codeTimeout = options.codeTimeout
+    }
+    if (options.tokenTimeout) {
+      this.tokenTimeout = options.tokenTimeout
     }
     if (options.verbose) {
       this.verbose = options.verbose

@@ -3,7 +3,18 @@ import open from 'open'
 
 import { Config } from './config'
 
-export const openBrowser = async (config: Config) => {
+// for DI
+interface Browser {
+  open(url: URL): Promise<void>
+}
+
+const realBrowser = {
+  async open(url: URL) {
+    await open(url.toString())
+  }
+}
+
+export const openBrowser = async (config: Config, browser: Browser = realBrowser) => {
   const state = randomBytes(32).toString('hex')
   const url = config.authorizeUrl()
   const params = new URLSearchParams({
@@ -18,6 +29,6 @@ export const openBrowser = async (config: Config) => {
     console.log(`Accessing GitHub to authenticate. If the browser does not open automaticcaly, copy this URL below to the browser.
 ${url}`)
   }
-  await open(url.toString())
+  await browser.open(url)
   return state
 }

@@ -28,9 +28,14 @@ export const getToken = async (config: Config, state: string, code: string) => {
       Accept: 'application/json'
     },
     httpsAgent: config.httpsAgent,
-    timeout: 60000
+    timeout: config.tokenTimeout
   }
-  const res = await axios.post(config.accessTokenUrl().toString(), body, options)
+  const res = await axios
+    .post(config.accessTokenUrl().toString(), body, options)
+    .catch((err: Error) => {
+      err.message = `raised in getting the token: ${err.message}`
+      throw err
+    })
   const obj = res.data
   if (isErrorResponse(obj)) {
     throw new Error(`error from GitHub:
@@ -52,7 +57,7 @@ export const getToken = async (config: Config, state: string, code: string) => {
  * GitHub's spec says we should use a space-separated string (ex. 'repo user'),
  * but the received one should be a comma-separated one (ex. 'repo,user').
  */
-const isValidScope = (config: Config, scope: string) => {
+export const isValidScope = (config: Config, scope: string) => {
   const scopeSet = scope.split(',').reduce<Set<string>>((a, b) => {
     a.add(b)
     return a
