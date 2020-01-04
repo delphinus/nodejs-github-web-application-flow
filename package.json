@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -fr dist && npm run lint && tsc",
+    "coveralls": "jest --coverage --coverageReporters text-lcov | coveralls",
     "lint": "bash -c 'eslint --fix src/**/*.ts examples/*.js'",
     "prepack": "npm run build",
     "test": "jest --verbose"
