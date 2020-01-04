@@ -1,0 +1,33 @@
+---
+language: node_js
+
+node_js:
+  - stable
+  - lts/*
+
+before_install:
+  - npm update
+
+install:
+  - npm install
+
+script:
+  - npm test
+  - npm run coveralls
+
+notifications:
+  slack:
+    on_success: change
+    on_failure: always
+    rooms:
+      secure: "Mg320dsnR8BM0yhs/0BN7iHw2wPAV5jo7shf6qzWV6tzI2YMvwwQmfR8HasjTPNJ\
+               m+XgZv2MNQgCisM4uAdC0uuRdox/pPMYTkG8ta2K4E1z8H1/LxnEu/9+2H+KlgVl\
+               JPR5oQlk039YNwng8szVSF/FNVYd8dIytonlnXzV4jIFRzp3BsS4lqrYcBFl2ejy\
+               pUwn+fjiZd+Y80wqBRKt/o2Rl+Tij9nIO40NBFJldqtmZzEtvScTc8tX4G2tY4ti\
+               r7vzN+vzz751AV8VXHtg5q2dtmA3n9bIAuVGtCpQR/21J0GpXFKRKpdCaTb9c7NN\
+               6mn+5tcIW8VID/CO/xHZFcKdoEEOivdBGYQwOJ0eE2w0yN6NjwBLv7mpFheP3j3m\
+               70AJZxXJiQdxwq3WEiXBxKiK5jQQHMAL1dyGJRcEyVtcZE59HyFo2YaMVKmuW/C5\
+               TEaQHVLSEvUyKpl8JLWV3W18/I8vcXpbF88tbg7a/TU8ETJ4qXmhzVJ7WBwDPsqP\
+               rT4NdxC1X6IZ07voXldDH1MhOwijxYO3zwzkL2+X0pYL4u5ae52b2KQ7M76kjB5a\
+               Bn00rlwVKYZiCuyreurFFZL9giLarADKaWFqH35gHZL5QHNAu83Cw8pYrjsBu06/\
+               Z6oGNZXuWZ6JjXIlpV+fFjlOTw4fgYiV5Zo/q0UvoEM="
