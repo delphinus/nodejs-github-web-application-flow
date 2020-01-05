@@ -142,4 +142,4 @@ MIT License
 
 ## Authors
 
-* JINNOUCHI Yasushi <me@delphinus.dev>
+* JINNOUCHI Yasushi &lt;me@delphinus.dev&gt;
