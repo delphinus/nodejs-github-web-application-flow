@@ -1,4 +1,4 @@
-# nodejs-github-web-application-flow
+# github-web-application-flow
 
 [![Build Status](https://travis-ci.com/delphinus/nodejs-github-web-application-flow.svg?branch=master)](https://travis-ci.com/delphinus/nodejs-github-web-application-flow)
 [![Coverage Status](https://coveralls.io/repos/github/delphinus/nodejs-github-web-application-flow/badge.svg?branch=master)](https://coveralls.io/github/delphinus/nodejs-github-web-application-flow?branch=master)
